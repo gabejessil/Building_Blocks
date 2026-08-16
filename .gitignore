@@ -1,0 +1,16 @@
+# Vivado generated files
+*.cache/
+*.hw/
+*.ip_user_files/
+*.runs/
+*.sim/
+*.gen/
+
+# Vivado logs/journals
+*.jou
+*.log
+*.str
+
+# Windows
+Thumbs.db
+Desktop.ini
