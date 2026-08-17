@@ -21,20 +21,26 @@
 
 
 module alu(
-    input [31:0] a,
-    input [31:0] b,
+    input [31:0] a, b,
     input [3:0] op,
     output reg [31:0] result,
-    output z,
-    output c,
-    output v,
-    output n
+    output reg z, n, c, v
     );
         
     always @(*) begin
+        z = 0;
+        n = 0;
+        c = 0;
+        v = 0;
         case (op)
-            4'b0000: result = a+b;
-            4'b0001: result = a-b;
+            4'b0000: begin
+                {c, result} = a+b;
+                v = (~(a[31] ^ b[31])) & (result[31] ^ a[31]);
+            end
+            4'b0001: begin
+                {c, result} = a + (~b) + 1'b1;
+                v = (a[31] ^ b[31]) & (result[31] ^ a[31]);
+            end
             4'b0010: result = a&b;
             4'b0011: result = a|b;
             4'b0100: result = a^b;
@@ -45,5 +51,10 @@ module alu(
             4'b1001: result = a < b;
             default: result = 32'h55555555;
         endcase
-    end
+        if (result == 32'h0)
+            z = 1'b1;
+        if (result[31] == 1'b1)
+            n = 1'b1;
+         
+    end            
 endmodule
