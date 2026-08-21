@@ -1,4 +1,9 @@
 # Building_Blocks
+8/21/26
+--------
+ALU program and TB are "done"
+
+
 8/16/26
 --------
 I am (re) learning Verilog and System Verilog
