@@ -74,3 +74,37 @@ module ripple_carry_adder #(parameter WIDTH=4) (
     endgenerate
     
 endmodule
+
+module carry_look_ahead_adder(
+    input [3:0] a, b,
+    input cin,
+    output [3:0] sum,
+    output cout
+);
+    wire [3:0] g, p;
+    wire [4:0] carry;
+
+    assign cout = carry[4];
+    assign g = a&b;
+    assign p = a^b;
+    assign carry[0] = cin;
+    assign carry[1] = g[0] |
+                      (p[0] & carry[0]);
+    assign carry[2] = g[1] |
+                      (p[1] & g[0]) |
+                      (p[1] & p[0] & carry[0]);
+    assign carry[3] = g[2] |
+                      (p[2] & g[1]) |
+                      (p[2] & p[1] & g[0]) |
+                      (p[2] & p[1] & p[0] & carry[0]);
+    assign carry[4] = g[3] |
+                      (p[3] & g[2]) |
+                      (p[3] & p[2] & g[1]) |
+                      (p[3] & p[2] & p[1] & g[0]) |
+                      (p[3] & p[2] & p[1] & p[0] & carry[0]);
+    assign sum[0] = p[0]^carry[0];
+    assign sum[1] = p[1]^carry[1];
+    assign sum[2] = p[2]^carry[2];
+    assign sum[3] = p[3]^carry[3];
+
+endmodule 
